@@ -1,4 +1,4 @@
-package entity;
+package com.example.onlinediary.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -10,7 +10,7 @@ public class StudentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "family")
     private String family;
@@ -24,4 +24,5 @@ public class StudentEntity {
     @ManyToOne
     @JoinColumn(name="class_id", nullable=false)
     private ClassesEntity classes;
+
 }
