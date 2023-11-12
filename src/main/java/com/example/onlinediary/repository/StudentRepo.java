@@ -1,6 +1,5 @@
 package com.example.onlinediary.repository;
 
-import com.example.onlinediary.entity.GradesEntity;
 import com.example.onlinediary.entity.StudentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 

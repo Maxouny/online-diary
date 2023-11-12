@@ -1,11 +1,9 @@
 package com.example.onlinediary.service;
 
-import com.example.onlinediary.DTO.StudentDataDTO;
+import com.example.onlinediary.dto.StudentDataDTO;
 import com.example.onlinediary.entity.StudentDataEntity;
 import com.example.onlinediary.exception.StudentNotFoundException;
 import com.example.onlinediary.repository.StudentDataRepo;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 @Primary
-public class StudentDataSevice {
+public class StudentDataService {
 
-    @Autowired
-    private StudentDataRepo studentDataRepo;
+    private final StudentDataRepo studentDataRepo;
+
+    public StudentDataService(StudentDataRepo studentDataRepo) {
+        this.studentDataRepo = studentDataRepo;
+    }
 
 
     public List<StudentDataDTO> getByClassGroups(int classesGroup) throws StudentNotFoundException {

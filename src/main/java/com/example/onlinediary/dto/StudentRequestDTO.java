@@ -1,4 +1,4 @@
-package com.example.onlinediary.DTO;
+package com.example.onlinediary.dto;
 
 import lombok.Data;
 

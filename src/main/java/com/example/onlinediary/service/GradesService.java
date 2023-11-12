@@ -1,68 +1,64 @@
 package com.example.onlinediary.service;
 
-import com.example.onlinediary.DTO.GradesDTO;
+import com.example.onlinediary.dto.GradesDTO;
+import com.example.onlinediary.dto.Subject;
 import com.example.onlinediary.entity.GradesEntity;
 import com.example.onlinediary.entity.StudentEntity;
 import com.example.onlinediary.exception.StudentNotFoundException;
 import com.example.onlinediary.repository.GradesRepo;
 import com.example.onlinediary.repository.StudentRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-// GradeService.java
 @Service
 public class GradesService {
 
-    @Autowired
-    private StudentRepo studentRepo;
+    private final StudentRepo studentRepo;
+    private final GradesRepo gradesRepo;
 
-    @Autowired
-    private GradesRepo gradesRepo;
+    public GradesService(StudentRepo studentRepo, GradesRepo gradesRepo) {
+        this.studentRepo = studentRepo;
+        this.gradesRepo = gradesRepo;
+    }
 
     public void updateGrade(GradesDTO gradeDTO) throws StudentNotFoundException {
         Optional<StudentEntity> optionalStudent = studentRepo.findById(gradeDTO.getStudentId());
 
-        if (optionalStudent.isPresent()) {
-            StudentEntity student = optionalStudent.get();
-            GradesEntity grades = gradesRepo.findByStudent(student)
-                    .orElseGet(() -> {
-                        GradesEntity newGrades = new GradesEntity();
-                        newGrades.setStudent(student);
-                        return newGrades;
-                    });
+        if (optionalStudent.isEmpty()) {
+            throw new StudentNotFoundException("Invalid studentId: " + gradeDTO.getStudentId());
+        }
 
-            switch (gradeDTO.getSubject().toLowerCase()) {
-                case "physics":
-                    grades.setPhysics(gradeDTO.getNewGrade());
-                    break;
-                case "mathematics":
-                    grades.setMathematics(gradeDTO.getNewGrade());
-                    break;
-                case "rus":
-                    grades.setRus(gradeDTO.getNewGrade());
-                    break;
-                case "literature":
-                    grades.setLiterature(gradeDTO.getNewGrade());
-                    break;
-                case "geometry":
-                    grades.setGeometry(gradeDTO.getNewGrade());
-                    break;
-                case "informatics":
-                    grades.setInformatics(gradeDTO.getNewGrade());
-                    break;
-                default:
-                    throw new IllegalArgumentException("Неверно указан предмет" + gradeDTO.getSubject());
-            }
-            grades.setAverageGrade(calculateAverageGrade(grades));
-            gradesRepo.save(grades);
-        } else {
-            throw new StudentNotFoundException("Невереный studentId" + gradeDTO.getStudentId());
+        StudentEntity student = optionalStudent.get();
+        GradesEntity grades = gradesRepo.findByStudent(student)
+                .orElseGet(() -> {
+                    GradesEntity newGrades = new GradesEntity();
+                    newGrades.setStudent(student);
+                    return newGrades;
+                });
+
+        updateGradeForSubject(gradeDTO.getSubject(), gradeDTO.getNewGrade(), grades);
+        grades.setAverageGrade(calculateAverageGrade(grades));
+        gradesRepo.save(grades);
+    }
+
+    private void updateGradeForSubject(Subject subject, int newGrade, GradesEntity grades) {
+        switch (subject) {
+            case PHYSICS -> grades.setPhysics(newGrade);
+            case MATHEMATICS -> grades.setMathematics(newGrade);
+            case RUS -> grades.setRus(newGrade);
+            case LITERATURE -> grades.setLiterature(newGrade);
+            case GEOMETRY -> grades.setGeometry(newGrade);
+            case INFORMATICS -> grades.setInformatics(newGrade);
+            default -> throw new IllegalArgumentException("Invalid subject: " + subject);
         }
     }
+
     private double calculateAverageGrade(GradesEntity grades) {
         return (grades.getPhysics() + grades.getMathematics() + grades.getLiterature() + grades.getGeometry() + grades.getInformatics()) / 5.0;
     }
 }
+
+
+
 

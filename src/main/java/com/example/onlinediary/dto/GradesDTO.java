@@ -1,10 +1,10 @@
-package com.example.onlinediary.DTO;
+package com.example.onlinediary.dto;
 
 import lombok.Data;
 
 @Data
 public class GradesDTO {
     private Long studentId;
-    private String subject;
+    private Subject subject;
     private int newGrade;
 }

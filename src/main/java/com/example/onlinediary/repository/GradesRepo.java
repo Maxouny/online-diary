@@ -11,12 +11,6 @@ public interface GradesRepo extends JpaRepository<GradesEntity, Long> {
 
     List<GradesEntity> findByStudentId(Long studentId);
     Optional<GradesEntity> findByStudent(StudentEntity student);
-//    GradesEntity findByAverageGrade(double average);
-//    GradesEntity findByPhysics(int physics);
-//    GradesEntity findByMathematics(int mathematics);
-//    GradesEntity findByRus(int rus);
-//    GradesEntity findByLiterature(int literature);
-//    GradesEntity findByGeometry(int geometry);
-//    GradesEntity findByInformatics(int informatics);
+
 
 }
