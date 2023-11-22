@@ -3,18 +3,15 @@ import com.example.onlinediary.entity.ClassesEntity;
 import com.example.onlinediary.entity.StudentEntity;
 import com.example.onlinediary.repository.ClassesRepo;
 import com.example.onlinediary.repository.StudentRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ClassesService {
 
     private final ClassesRepo classesRepo;
     private final StudentRepo studentRepo;
-
-    public ClassesService(ClassesRepo classesRepo, StudentRepo studentRepo) {
-        this.classesRepo = classesRepo;
-        this.studentRepo = studentRepo;
-    }
 
     public StudentEntity addStudentToClass(Long classGroup, StudentEntity newStudent){
         ClassesEntity classes = classesRepo.findByClassGroup(classGroup);
@@ -22,6 +19,4 @@ public class ClassesService {
         newStudent.setClasses(classes);
         return studentRepo.save(newStudent);
     }
-
-
 }
